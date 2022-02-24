@@ -1,9 +1,11 @@
 # Rijksapi
 Simple search webapp using the Rijksmuseum API
 
+
+
 ## To get started
 
-Create a config.ini file in root containening:
+Create a config.ini file in root containing:
 ```
 [api]
 api_key = <YOUR-API-KEY>
