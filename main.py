@@ -1,5 +1,6 @@
 import requests
 import configparser
+import json
 
 from flask import Flask, send_file
 from flask_cors import CORS, cross_origin
@@ -19,7 +20,7 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 
 
 def get_rijks(q):
-    url = 'https://www.rijksmuseum.nl/api/nl/collection?key={}&imgonly=True&toppieces=True&q={}&s=relevance&ps=1'.format(
+    url = 'https://www.rijksmuseum.nl/api/nl/collection?key={}&imgonly=True&toppieces=True&q={}&s=relevance&ps=9'.format(
         API_KEY, q)
     response = requests.get(url)
     if response.status_code == 200:
@@ -31,14 +32,15 @@ def parse_rijks(data):
     Function that will parse the rijksmuseam api response to filter out
     title, maker and imageurl
     """
-    result = {}
+    result = []
     for artObject in data['artObjects']:
         try:
-            result[artObject['id']] = {
+            result.append({
+                'id' : artObject['id'],
                 'title': artObject['title'],
                 'maker': artObject['principalOrFirstMaker'],
                 'imageurl': artObject['webImage']['url']
-            }
+            })
         except:
             pass
     return result
@@ -65,7 +67,7 @@ def favicon():
 def get(q):
     data = get_rijks(q)
     result = parse_rijks(data)
-    return result
+    return {'result' : result}
 
 
 if __name__ == "__main__":
