@@ -25,7 +25,7 @@ const app = new Vue({
                 }                
             })
             .then(response => {
-                this.results = response;
+                this.results = response['result'];
                 this.responseAvailable = true;
             })
             .catch(err => {
